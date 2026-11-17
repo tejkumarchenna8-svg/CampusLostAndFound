@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/site :: head('Administrator Sign-in | Campus Lost &amp; Found')}"></head>
+<body>
+<header th:replace="~{fragments/site :: header('admin')}"></header>
+<main class="admin-main page-main">
+    <section class="panel admin-panel" aria-labelledby="page-title">
+        <div class="eyebrow">Administrator access</div><h1 class="page-heading" id="page-title">Sign in</h1>
+        <p class="intro">Sign in with an administrator account to manage report statuses. Public search remains available to everyone.</p>
+        <div class="notice" role="alert" th:if="${param.error}">Sign-in failed. Check your administrator username and password.</div>
+        <form class="form-stack" th:action="@{/login}" action="/login" method="post">
+            <div class="field"><label for="username">Administrator username</label><input id="username" name="username" type="text" autocomplete="username" required autofocus></div>
+            <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required></div>
+            <button class="button" type="submit">Sign in</button>
+        </form>
+        <p class="admin-hint">Only users with the ADMIN role can mark eligible reports as recovered.</p>
+    </section>
+</main>
+<footer th:replace="~{fragments/site :: footer}"></footer>
+</body>
+</html>

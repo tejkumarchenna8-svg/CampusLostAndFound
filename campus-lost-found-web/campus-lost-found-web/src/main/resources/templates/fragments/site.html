@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(pageTitle)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f7fc">
+    <title th:text="${pageTitle}">Campus Lost &amp; Found</title>
+    <link rel="stylesheet" th:href="@{/css/site.css}">
+</head>
+<body>
+<header class="site-header" th:fragment="header(activePage)">
+    <div class="header-inner">
+        <a class="brand" th:href="@{/}" href="/" aria-label="Campus Lost and Found home"><span class="brand-mark" aria-hidden="true">&#9906;</span><span>Campus Lost &amp; Found</span></a>
+        <nav class="site-nav" aria-label="Main navigation">
+            <a th:class="${activePage == 'home'} ? 'nav-link active' : 'nav-link'" th:href="@{/}" href="/">Home</a>
+            <a th:class="${activePage == 'lost'} ? 'nav-link active' : 'nav-link'" th:href="@{/report-lost}" href="/report-lost">Report Lost</a>
+            <a th:class="${activePage == 'found'} ? 'nav-link active' : 'nav-link'" th:href="@{/report-found}" href="/report-found">Report Found</a>
+            <a th:class="${activePage == 'search'} ? 'nav-link active' : 'nav-link'" th:href="@{/search}" href="/search">Search</a>
+            <a th:class="${activePage == 'admin'} ? 'nav-link nav-admin active' : 'nav-link nav-admin'" th:href="@{/admin}" href="/admin">Admin</a>
+        </nav>
+    </div>
+</header>
+<footer class="site-footer" th:fragment="footer">
+    <div class="footer-inner"><span class="footer-mark">Campus Lost &amp; Found</span><span>Helping our campus community reconnect with what matters.</span></div>
+</footer>
+</body>
+</html>

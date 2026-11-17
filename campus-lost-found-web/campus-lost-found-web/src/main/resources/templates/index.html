@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/site :: head('Campus Lost &amp; Found')}"></head>
+<body>
+<header th:replace="~{fragments/site :: header('home')}"></header>
+<main>
+    <section class="hero" aria-labelledby="welcome-title">
+        <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Your campus community</div>
+        <h1 id="welcome-title">Lost something? <em>Find your way back.</em></h1>
+        <p class="intro">A misplaced item should not keep you from your day. Report what you lost, help return something you found, or search campus listings.</p>
+    </section>
+    <section class="stats" aria-label="Live report statistics">
+        <article class="stat-card"><span class="stat-icon" aria-hidden="true">T</span><div><p class="stat-label">Total Reports</p><strong class="stat-value" th:text="${statistics.totalReports}">0</strong></div></article>
+        <article class="stat-card"><span class="stat-icon" aria-hidden="true">L</span><div><p class="stat-label">Lost Items</p><strong class="stat-value" th:text="${statistics.lostItems}">0</strong></div></article>
+        <article class="stat-card"><span class="stat-icon" aria-hidden="true">F</span><div><p class="stat-label">Found Items</p><strong class="stat-value" th:text="${statistics.foundItems}">0</strong></div></article>
+        <article class="stat-card"><span class="stat-icon" aria-hidden="true">R</span><div><p class="stat-label">Recovered Items</p><strong class="stat-value" th:text="${statistics.recoveredItems}">0</strong></div></article>
+    </section>
+    <section aria-labelledby="actions-title">
+        <h2 class="section-heading" id="actions-title">How can we help?</h2>
+        <div class="action-grid">
+            <a class="action-card" th:href="@{/report-lost}" href="/report-lost"><span class="action-icon" aria-hidden="true">L</span><h2>Report Lost Item</h2><p>Tell the campus community what went missing and where you last saw it.</p><span class="action-arrow" aria-hidden="true">&rarr;</span></a>
+            <a class="action-card" th:href="@{/report-found}" href="/report-found"><span class="action-icon" aria-hidden="true">F</span><h2>Report Found Item</h2><p>Help reunite an item with its owner by sharing where you found it.</p><span class="action-arrow" aria-hidden="true">&rarr;</span></a>
+            <a class="action-card" th:href="@{/search}" href="/search"><span class="action-icon" aria-hidden="true">&#9906;</span><h2>Search Items</h2><p>Browse lost and found listings from around your campus.</p><span class="action-arrow" aria-hidden="true">&rarr;</span></a>
+        </div>
+    </section>
+</main>
+<footer th:replace="~{fragments/site :: footer}"></footer>
+</body>
+</html>

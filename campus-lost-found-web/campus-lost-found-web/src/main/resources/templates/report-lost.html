@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/site :: head('Report Lost Item | Campus Lost &amp; Found')}"></head>
+<body>
+<header th:replace="~{fragments/site :: header('lost')}"></header>
+<main class="narrow-main page-main">
+    <section class="page-heading" aria-labelledby="page-title"><div class="eyebrow">Lost item report</div><h1 id="page-title">Tell us what went missing</h1><p class="intro">Share a few details with your campus community so someone can help you find it.</p></section>
+    <section class="panel" aria-label="Lost item report form">
+        <div class="notice success" role="status" th:if="${successMessage}" th:text="${successMessage}"></div>
+        <div class="notice" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+        <form class="form-stack" th:action="@{/report-lost}" action="/report-lost" method="post">
+            <div class="form-grid">
+                <div class="field"><label for="itemName">Item Name <span class="required">*</span></label><input id="itemName" name="itemName" type="text" placeholder="e.g. Blue water bottle" required maxlength="120" th:value="${itemName}"></div>
+                <div class="field"><label for="category">Category <span class="required">*</span></label><select id="category" name="category" required><option value="" disabled th:selected="${category == ''}">Choose a category</option><option value="Electronics" th:selected="${category == 'Electronics'}">Electronics</option><option value="Books &amp; stationery" th:selected="${category == 'Books &amp; stationery'}">Books &amp; stationery</option><option value="Clothing &amp; accessories" th:selected="${category == 'Clothing &amp; accessories'}">Clothing &amp; accessories</option><option value="Keys &amp; cards" th:selected="${category == 'Keys &amp; cards'}">Keys &amp; cards</option><option value="Other" th:selected="${category == 'Other'}">Other</option></select></div>
+                <div class="field"><label for="lastSeenLocation">Last Seen Location <span class="required">*</span></label><input id="lastSeenLocation" name="lastSeenLocation" type="text" placeholder="e.g. Library, second floor" required maxlength="160" th:value="${lastSeenLocation}"></div>
+                <div class="field"><label for="dateLost">Date Lost <span class="required">*</span></label><input id="dateLost" name="dateLost" type="date" required th:value="${dateLost}"></div>
+            </div>
+            <div class="field"><label for="description">Description <span class="required">*</span></label><textarea id="description" name="description" placeholder="Add details that could help identify your item" required maxlength="1500" th:text="${description}"></textarea></div>
+            <div class="field"><label for="contactInformation">Contact Information <span class="required">*</span></label><input id="contactInformation" name="contactInformation" type="text" placeholder="Email or phone number" required maxlength="160" th:value="${contactInformation}"></div>
+            <div class="form-actions"><button class="button" type="submit">Submit Lost Report</button><a class="button button-secondary" th:href="@{/}" href="/">Back to Home</a></div>
+        </form>
+        <p class="helper-note">Your report is stored in the campus lost and found database. Contact information is kept out of public search results.</p>
+    </section>
+</main>
+<footer th:replace="~{fragments/site :: footer}"></footer>
+</body>
+</html>
