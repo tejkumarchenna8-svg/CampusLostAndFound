@@ -1,4 +1,4 @@
-# Campus Lost & Found System
+﻿# Campus Lost & Found System
 
 ## Introduction
 
@@ -27,7 +27,7 @@ Students and staff can have difficulty reporting misplaced belongings and findin
 - Ability to mark an unrecovered found report as recovered.
 - Clear and cancel actions on report forms.
 - Local persistence in `data/items.txt`.
-- Damaged records are skipped during loading and reported to the console. File access failures are handled as storage errors.
+- Damaged records are skipped during loading, with a warning displayed in the application. File access failures are handled as storage errors.
 
 ## Technologies Used
 
@@ -89,7 +89,13 @@ java -cp out campuslostfound.Main
 
 ## Testing Completed
 
-- The full Java source set compiled successfully with `javac`.
-- A file-storage audit using a temporary copy verified saving lost and found reports, marking a report recovered, reloading records, ID uniqueness checks, special-character handling, legacy record loading, empty-file loading, and tolerance of a damaged row.
-- The real `data/items.txt` was not used for test submissions.
-- A full interactive GUI test was attempted on a temporary project copy but did not complete because the automation stalled at a validation alert. The Swing form, filter, and restart workflows therefore still need a manual end-to-end check.
+The following manual tests passed:
+
+- Lost item submission
+- Found item submission
+- Search and filters
+- Marking a found item as recovered
+- Restart persistence
+- Damaged-record warning displayed in the application
+
+The project compiles successfully using `javac`.
