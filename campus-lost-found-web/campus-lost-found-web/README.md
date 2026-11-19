@@ -1,4 +1,4 @@
-﻿# Campus Lost & Found
+# Campus Lost & Found
 
 A Spring Boot web application that helps a campus community report lost belongings, share found items, and search existing reports. Student accounts can track their own submissions, while administrator access is reserved for managing report recovery status.
 
@@ -106,7 +106,28 @@ Open [http://localhost:8080/admin](http://localhost:8080/admin) to reach the adm
 
 The admin account has the `ADMIN` role. Administrator-only routes and the Mark as Recovered action require that role. Student login and logout use separate URLs from administrator login and logout. CSRF protection is enabled for form submissions.
 
-For production, activate the `prod` profile and provide the database and administrator password through environment variables. The production configuration expects `DATABASE_URL`, `DATABASE_USERNAME`, `DATABASE_PASSWORD`, and `SPRING_SECURITY_USER_PASSWORD`; it uses PostgreSQL. Keep these values out of source control and do not use local development credentials in production.
+For production on Render, create a PostgreSQL database and a Docker web service from this repository. Use the database connection details to set the environment variables below in the Render service settings. Keep passwords out of source control and do not put them in the Dockerfile.
+
+| Environment variable | Required | Purpose |
+| --- | --- | --- |
+| `SPRING_PROFILES_ACTIVE` | Yes | Set to `prod` to load `application-prod.properties`. |
+| `PORT` | Provided by Render | Port for the web server to listen on. The application falls back to `8080` when this variable is absent. |
+| `DATABASE_JDBC_URL` | Yes | JDBC-formatted PostgreSQL URL, for example `jdbc:postgresql://<host>:5432/<database>`. |
+| `DATABASE_USERNAME` | Yes | PostgreSQL database username. |
+| `DATABASE_PASSWORD` | Yes | PostgreSQL database password. Store as a secret environment variable. |
+| `SPRING_SECURITY_USER_PASSWORD` | Yes | Password for the `ADMIN` account. Store as a secret environment variable. |
+| `CAMPUS_ADMIN_USERNAME` | No | Optional admin username; defaults to `campus-admin`. |
+
+Set `DATABASE_JDBC_URL` using the PostgreSQL host and database name supplied by Render, with the `jdbc:postgresql://` prefix. Set the database username and password separately in their corresponding variables. Render supplies `PORT` to web services; do not place its value in source control.
+
+To build and run the container locally (using the local H2 profile):
+
+```powershell
+docker build -t campus-lost-found .
+docker run --rm -p 8080:8080 campus-lost-found
+```
+
+The container listens on `0.0.0.0`. For a Render deployment, the platform-provided `PORT` takes precedence over the local fallback. The example container run uses H2 data inside the container, which is temporary when the container is removed; use the normal Maven local run for persistent H2 development.
 
 ## Future enhancements
 

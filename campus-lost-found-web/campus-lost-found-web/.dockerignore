@@ -1,0 +1,11 @@
+.git
+.vscode
+.idea
+.classpath
+.project
+target/
+data/
+*.mv.db
+*.trace.db
+.env
+.env.*
