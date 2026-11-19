@@ -2,6 +2,8 @@ package campus_lost_found_web;
 
 import campus_lost_found_web.entity.ItemReportSummary;
 import campus_lost_found_web.service.ItemReportService;
+import campus_lost_found_web.service.StudentDashboardData;
+import campus_lost_found_web.service.StudentDashboardService;
 import java.util.List;
 import java.util.Set;
 import org.springframework.dao.DataAccessException;
@@ -21,9 +23,11 @@ public class HomeController {
     private static final Set<String> CATEGORIES = Set.of(
             "Electronics", "Books & stationery", "Clothing & accessories", "Keys & cards", "Other");
     private final ItemReportService itemReportService;
+    private final StudentDashboardService studentDashboardService;
 
-    public HomeController(ItemReportService itemReportService) {
+    public HomeController(ItemReportService itemReportService, StudentDashboardService studentDashboardService) {
         this.itemReportService = itemReportService;
+        this.studentDashboardService = studentDashboardService;
     }
 
     @GetMapping("/")
@@ -44,11 +48,11 @@ public class HomeController {
             @RequestParam(defaultValue = "") String lastSeenLocation,
             @RequestParam(defaultValue = "") String dateLost,
             @RequestParam(defaultValue = "") String description,
-            @RequestParam(defaultValue = "") String contactInformation, Model model) {
+            @RequestParam(defaultValue = "") String contactInformation, Authentication authentication, Model model) {
         populateForm(model, itemName, category, lastSeenLocation, dateLost, description, contactInformation,
                 "lastSeenLocation", "dateLost");
         return saveReport("Lost", itemName, category, lastSeenLocation, dateLost, description,
-                contactInformation, model, "report-lost");
+                contactInformation, authentication, model, "report-lost");
     }
 
     @GetMapping("/report-found")
@@ -63,17 +67,18 @@ public class HomeController {
             @RequestParam(defaultValue = "") String foundLocation,
             @RequestParam(defaultValue = "") String dateFound,
             @RequestParam(defaultValue = "") String description,
-            @RequestParam(defaultValue = "") String contactInformation, Model model) {
+            @RequestParam(defaultValue = "") String contactInformation, Authentication authentication, Model model) {
         populateForm(model, itemName, category, foundLocation, dateFound, description, contactInformation,
                 "foundLocation", "dateFound");
         return saveReport("Found", itemName, category, foundLocation, dateFound, description,
-                contactInformation, model, "report-found");
+                contactInformation, authentication, model, "report-found");
     }
 
     private String saveReport(String type, String name, String category, String location, String date,
-                              String description, String contact, Model model, String view) {
+                              String description, String contact, Authentication authentication, Model model, String view) {
         try {
-            itemReportService.save(type, name, category, location, date, description, contact);
+            String reporterUsername = hasRole(authentication, "ROLE_USER") ? authentication.getName() : null;
+            itemReportService.save(type, name, category, location, date, description, contact, reporterUsername);
             model.addAttribute("successMessage", "Your " + type.toLowerCase()
                     + " item report has been saved and is now available in search.");
         } catch (IllegalArgumentException exception) {
@@ -82,6 +87,14 @@ public class HomeController {
             model.addAttribute("errorMessage", "We could not save your report right now. Please try again.");
         }
         return view;
+    }
+
+    @GetMapping("/student/dashboard")
+    @PreAuthorize("hasRole('USER')")
+    public String studentDashboard(Authentication authentication, Model model) {
+        StudentDashboardData dashboard = studentDashboardService.dashboardFor(authentication.getName());
+        model.addAttribute("dashboard", dashboard);
+        return "student-dashboard";
     }
 
     @GetMapping("/search")
@@ -96,6 +109,7 @@ public class HomeController {
         model.addAttribute("category", cleanCategory);
         model.addAttribute("reportType", cleanType);
         model.addAttribute("isAdmin", hasAdminRole(authentication));
+        model.addAttribute("isStudent", hasRole(authentication, "ROLE_USER"));
         if (cleanName.length() > 120 || (!cleanCategory.isEmpty() && !CATEGORIES.contains(cleanCategory))
                 || !Set.of("All", "Lost", "Found").contains(cleanType)) {
             model.addAttribute("errorMessage", "Choose valid search filters and keep the item name under 120 characters.");
@@ -110,6 +124,11 @@ public class HomeController {
             model.addAttribute("reports", List.of());
         }
         return "search";
+    }
+    private boolean hasRole(Authentication authentication, String role) {
+        return authentication != null && authentication.isAuthenticated()
+                && authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(role));
     }
     private boolean hasAdminRole(Authentication authentication) {
         return authentication != null && authentication.isAuthenticated()

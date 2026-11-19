@@ -3,24 +3,38 @@
 <head th:replace="~{fragments/site :: head('Campus Lost &amp; Found')}"></head>
 <body>
 <header th:replace="~{fragments/site :: header('home')}"></header>
-<main>
-    <section class="hero" aria-labelledby="welcome-title">
-        <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Your campus community</div>
-        <h1 id="welcome-title">Lost something? <em>Find your way back.</em></h1>
-        <p class="intro">A misplaced item should not keep you from your day. Report what you lost, help return something you found, or search campus listings.</p>
+<main class="home-main">
+    <section class="hero home-hero" aria-labelledby="welcome-title">
+        <div class="hero-copy">
+            <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> A helping hand, right here on campus</div>
+            <h1 id="welcome-title">Campus <span>Lost &amp; Found</span></h1>
+            <p class="intro">Lost something between classes, or found an item that needs its way home? Share a report or search campus listings to help reconnect people with their belongings.</p>
+            <div class="hero-actions" aria-label="Get started">
+                <a class="button home-cta" th:href="@{/report-lost}" href="/report-lost"><span aria-hidden="true">+</span> Report Lost Item</a>
+                <a class="button home-cta home-cta-secondary" th:href="@{/report-found}" href="/report-found"><span aria-hidden="true">&#10003;</span> Report Found Item</a>
+                <a class="button home-cta home-cta-quiet" th:href="@{/search}" href="/search"><span aria-hidden="true">&#9906;</span> Search Items</a>
+            </div>
+            <p class="hero-assurance"><span aria-hidden="true">&#10003;</span> Public listings never show contact information.</p>
+        </div>
+        <div class="hero-art" aria-hidden="true"><div class="hero-art-ring"></div><div class="hero-art-card"><span class="hero-art-icon">&#9906;</span><span class="hero-art-line hero-art-line-long"></span><span class="hero-art-line"></span><span class="hero-art-pill">Back where it belongs</span></div><span class="hero-art-spark spark-one">&#10022;</span><span class="hero-art-spark spark-two">&#10022;</span></div>
     </section>
-    <section class="stats" aria-label="Live report statistics">
-        <article class="stat-card"><span class="stat-icon" aria-hidden="true">T</span><div><p class="stat-label">Total Reports</p><strong class="stat-value" th:text="${statistics.totalReports}">0</strong></div></article>
-        <article class="stat-card"><span class="stat-icon" aria-hidden="true">L</span><div><p class="stat-label">Lost Items</p><strong class="stat-value" th:text="${statistics.lostItems}">0</strong></div></article>
-        <article class="stat-card"><span class="stat-icon" aria-hidden="true">F</span><div><p class="stat-label">Found Items</p><strong class="stat-value" th:text="${statistics.foundItems}">0</strong></div></article>
-        <article class="stat-card"><span class="stat-icon" aria-hidden="true">R</span><div><p class="stat-label">Recovered Items</p><strong class="stat-value" th:text="${statistics.recoveredItems}">0</strong></div></article>
+
+    <section class="home-stats-section" aria-labelledby="stats-title">
+        <div class="home-section-heading"><div><div class="eyebrow">Live campus activity</div><h2 id="stats-title">Community at a glance</h2></div><p>Updated from current campus reports</p></div>
+        <div class="stats" aria-label="Live report statistics">
+            <article class="stat-card"><span class="stat-icon" aria-hidden="true">T</span><div><p class="stat-label">Total Reports</p><strong class="stat-value" th:text="${statistics.totalReports}">0</strong></div></article>
+            <article class="stat-card"><span class="stat-icon" aria-hidden="true">L</span><div><p class="stat-label">Lost Items</p><strong class="stat-value" th:text="${statistics.lostItems}">0</strong></div></article>
+            <article class="stat-card"><span class="stat-icon" aria-hidden="true">F</span><div><p class="stat-label">Found Items</p><strong class="stat-value" th:text="${statistics.foundItems}">0</strong></div></article>
+            <article class="stat-card"><span class="stat-icon" aria-hidden="true">R</span><div><p class="stat-label">Recovered Items</p><strong class="stat-value" th:text="${statistics.recoveredItems}">0</strong></div></article>
+        </div>
     </section>
-    <section aria-labelledby="actions-title">
-        <h2 class="section-heading" id="actions-title">How can we help?</h2>
-        <div class="action-grid">
-            <a class="action-card" th:href="@{/report-lost}" href="/report-lost"><span class="action-icon" aria-hidden="true">L</span><h2>Report Lost Item</h2><p>Tell the campus community what went missing and where you last saw it.</p><span class="action-arrow" aria-hidden="true">&rarr;</span></a>
-            <a class="action-card" th:href="@{/report-found}" href="/report-found"><span class="action-icon" aria-hidden="true">F</span><h2>Report Found Item</h2><p>Help reunite an item with its owner by sharing where you found it.</p><span class="action-arrow" aria-hidden="true">&rarr;</span></a>
-            <a class="action-card" th:href="@{/search}" href="/search"><span class="action-icon" aria-hidden="true">&#9906;</span><h2>Search Items</h2><p>Browse lost and found listings from around your campus.</p><span class="action-arrow" aria-hidden="true">&rarr;</span></a>
+
+    <section class="how-section" aria-labelledby="how-title">
+        <div class="home-section-heading"><div><div class="eyebrow">Simple, helpful, campus-wide</div><h2 id="how-title">A little information goes a long way</h2></div><a class="text-link" th:href="@{/search}" href="/search">Browse all reports <span aria-hidden="true">&rarr;</span></a></div>
+        <div class="feature-grid">
+            <article class="feature-card"><span class="feature-number">01</span><span class="feature-symbol lost-symbol" aria-hidden="true">L</span><h3>Share what went missing</h3><p>Add the item name, category and last-seen details so others can recognize what you are looking for.</p></article>
+            <article class="feature-card"><span class="feature-number">02</span><span class="feature-symbol found-symbol" aria-hidden="true">F</span><h3>Help an item find its owner</h3><p>Post a found-item report with its location and a description to make a reunion easier.</p></article>
+            <article class="feature-card"><span class="feature-number">03</span><span class="feature-symbol search-symbol" aria-hidden="true">&#9906;</span><h3>Search campus listings</h3><p>Browse current lost and found reports. Contact details stay private in public search.</p></article>
         </div>
     </section>
 </main>

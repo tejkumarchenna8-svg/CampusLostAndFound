@@ -9,6 +9,14 @@ import org.springframework.data.repository.query.Param;
 
 public interface ItemReportRepository extends JpaRepository<ItemReport, Long> {
 
+    List<ItemReport> findByReportedBy_IdOrderByCreatedAtDesc(Long studentId);
+
+    long countByReportedBy_Id(Long studentId);
+
+    long countByReportedBy_IdAndStatus(Long studentId, ReportStatus status);
+
+
+
     @Query("select count(report) from ItemReport report " +
             "where report.status = :status or " +
             "(report.status is null and report.reportType = :legacyReportType)")

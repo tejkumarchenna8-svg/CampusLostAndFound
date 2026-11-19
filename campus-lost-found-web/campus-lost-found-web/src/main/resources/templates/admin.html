@@ -5,17 +5,31 @@
 <header th:replace="~{fragments/site :: header('admin')}"></header>
 <main class="admin-main page-main">
     <section class="panel admin-panel" aria-labelledby="page-title">
-        <div class="eyebrow">Administrator access</div><h1 class="page-heading" id="page-title">Sign in</h1>
-        <p class="intro">Sign in with an administrator account to manage report statuses. Public search remains available to everyone.</p>
-        <div class="notice" role="alert" th:if="${param.error}">Sign-in failed. Check your administrator username and password.</div>
-        <form class="form-stack" th:action="@{/login}" action="/login" method="post">
-            <div class="field"><label for="username">Administrator username</label><input id="username" name="username" type="text" autocomplete="username" required autofocus></div>
-            <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required></div>
-            <button class="button" type="submit">Sign in</button>
+        <div class="login-mark" aria-hidden="true">&#9906;</div>
+        <div class="eyebrow">Administrator access</div>
+        <h1 class="login-title" id="page-title">Welcome back</h1>
+        <p class="intro">Sign in to manage report statuses and help reunite campus community members with their belongings.</p>
+        <div class="notice" role="alert" th:if="${param.error}">Sign-in failed. Check your administrator username and password, then try again.</div>
+        <div class="notice success" role="status" th:if="${param.logout}">You have been signed out successfully.</div>
+        <form class="login-form" th:action="@{/login}" action="/login" method="post">
+            <div class="field"><label for="username">Username</label><input id="username" name="username" type="text" autocomplete="username" placeholder="Administrator username" required autofocus></div>
+            <div class="field"><label for="password">Password</label><div class="password-control"><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required><button class="password-toggle" id="passwordToggle" type="button" aria-controls="password" aria-pressed="false">Show</button></div></div>
+            <button class="button login-submit" type="submit">Sign in securely</button>
         </form>
-        <p class="admin-hint">Only users with the ADMIN role can mark eligible reports as recovered.</p>
+        <p class="admin-hint">Administrator access is required to change report statuses.</p>
+        <a class="login-home-link" th:href="@{/}" href="/">&larr; Return to homepage</a>
     </section>
 </main>
 <footer th:replace="~{fragments/site :: footer}"></footer>
+<script>
+    const passwordField = document.getElementById('password');
+    const passwordToggle = document.getElementById('passwordToggle');
+    passwordToggle.addEventListener('click', () => {
+        const shouldShow = passwordField.type === 'password';
+        passwordField.type = shouldShow ? 'text' : 'password';
+        passwordToggle.textContent = shouldShow ? 'Hide' : 'Show';
+        passwordToggle.setAttribute('aria-pressed', String(shouldShow));
+    });
+</script>
 </body>
 </html>

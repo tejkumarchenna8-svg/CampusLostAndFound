@@ -4,9 +4,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
@@ -45,6 +48,10 @@ public class ItemReport {
     @Column(nullable = false, length = 160)
     private String contactInformation;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id")
+    private Student reportedBy;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -52,6 +59,11 @@ public class ItemReport {
 
     public ItemReport(String reportType, String itemName, String category, String location,
                       LocalDate reportDate, String description, String contactInformation) {
+        this(reportType, itemName, category, location, reportDate, description, contactInformation, null);
+    }
+
+    public ItemReport(String reportType, String itemName, String category, String location,
+                      LocalDate reportDate, String description, String contactInformation, Student reportedBy) {
         this.reportType = reportType;
         this.status = "Lost".equals(reportType) ? ReportStatus.LOST : ReportStatus.FOUND;
         this.itemName = itemName;
@@ -60,6 +72,7 @@ public class ItemReport {
         this.reportDate = reportDate;
         this.description = description;
         this.contactInformation = contactInformation;
+        this.reportedBy = reportedBy;
     }
 
     @PrePersist
@@ -84,5 +97,6 @@ public class ItemReport {
     public LocalDate getReportDate() { return reportDate; }
     public String getDescription() { return description; }
     public String getContactInformation() { return contactInformation; }
+    public Student getReportedBy() { return reportedBy; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 }

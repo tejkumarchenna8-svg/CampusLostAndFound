@@ -3,23 +3,38 @@
 <head th:replace="~{fragments/site :: head('Report Lost Item | Campus Lost &amp; Found')}"></head>
 <body>
 <header th:replace="~{fragments/site :: header('lost')}"></header>
-<main class="narrow-main page-main">
-    <section class="page-heading" aria-labelledby="page-title"><div class="eyebrow">Lost item report</div><h1 id="page-title">Tell us what went missing</h1><p class="intro">Share a few details with your campus community so someone can help you find it.</p></section>
-    <section class="panel" aria-label="Lost item report form">
+<main class="narrow-main page-main report-page-main">
+    <section class="page-heading report-page-heading" aria-labelledby="page-title">
+        <div class="report-heading-copy"><div class="eyebrow">Lost item report</div><h1 id="page-title">Tell us what went missing</h1><p class="intro">A few helpful details can make it easier for someone on campus to recognize your item.</p></div>
+        <span class="report-type-mark lost-mark" aria-hidden="true">L</span>
+    </section>
+    <section class="panel report-panel" aria-label="Lost item report form">
+        <div class="report-form-intro"><span class="required-key"><span class="required">*</span> Required fields</span><p>Include the details you would want to see if you were searching.</p></div>
         <div class="notice success" role="status" th:if="${successMessage}" th:text="${successMessage}"></div>
         <div class="notice" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
-        <form class="form-stack" th:action="@{/report-lost}" action="/report-lost" method="post">
-            <div class="form-grid">
-                <div class="field"><label for="itemName">Item Name <span class="required">*</span></label><input id="itemName" name="itemName" type="text" placeholder="e.g. Blue water bottle" required maxlength="120" th:value="${itemName}"></div>
-                <div class="field"><label for="category">Category <span class="required">*</span></label><select id="category" name="category" required><option value="" disabled th:selected="${category == ''}">Choose a category</option><option value="Electronics" th:selected="${category == 'Electronics'}">Electronics</option><option value="Books &amp; stationery" th:selected="${category == 'Books &amp; stationery'}">Books &amp; stationery</option><option value="Clothing &amp; accessories" th:selected="${category == 'Clothing &amp; accessories'}">Clothing &amp; accessories</option><option value="Keys &amp; cards" th:selected="${category == 'Keys &amp; cards'}">Keys &amp; cards</option><option value="Other" th:selected="${category == 'Other'}">Other</option></select></div>
-                <div class="field"><label for="lastSeenLocation">Last Seen Location <span class="required">*</span></label><input id="lastSeenLocation" name="lastSeenLocation" type="text" placeholder="e.g. Library, second floor" required maxlength="160" th:value="${lastSeenLocation}"></div>
-                <div class="field"><label for="dateLost">Date Lost <span class="required">*</span></label><input id="dateLost" name="dateLost" type="date" required th:value="${dateLost}"></div>
-            </div>
-            <div class="field"><label for="description">Description <span class="required">*</span></label><textarea id="description" name="description" placeholder="Add details that could help identify your item" required maxlength="1500" th:text="${description}"></textarea></div>
-            <div class="field"><label for="contactInformation">Contact Information <span class="required">*</span></label><input id="contactInformation" name="contactInformation" type="text" placeholder="Email or phone number" required maxlength="160" th:value="${contactInformation}"></div>
-            <div class="form-actions"><button class="button" type="submit">Submit Lost Report</button><a class="button button-secondary" th:href="@{/}" href="/">Back to Home</a></div>
+        <form class="form-stack report-form" th:action="@{/report-lost}" action="/report-lost" method="post">
+            <fieldset class="form-section">
+                <legend><span class="form-section-number">01</span> Item details</legend>
+                <div class="form-grid">
+                    <div class="field"><label for="itemName">Item Name <span class="required">*</span></label><input id="itemName" name="itemName" type="text" placeholder="e.g. Blue water bottle" required maxlength="120" autocomplete="off" aria-describedby="itemNameHelp" th:value="${itemName}"><span class="field-help" id="itemNameHelp">A short, recognizable name works best.</span></div>
+                    <div class="field"><label for="category">Category <span class="required">*</span></label><select id="category" name="category" required><option value="" disabled th:selected="${category == ''}">Choose a category</option><option value="Electronics" th:selected="${category == 'Electronics'}">Electronics</option><option value="Books &amp; stationery" th:selected="${category == 'Books &amp; stationery'}">Books &amp; stationery</option><option value="Clothing &amp; accessories" th:selected="${category == 'Clothing &amp; accessories'}">Clothing &amp; accessories</option><option value="Keys &amp; cards" th:selected="${category == 'Keys &amp; cards'}">Keys &amp; cards</option><option value="Other" th:selected="${category == 'Other'}">Other</option></select></div>
+                </div>
+            </fieldset>
+            <fieldset class="form-section">
+                <legend><span class="form-section-number">02</span> Last seen</legend>
+                <div class="form-grid">
+                    <div class="field"><label for="lastSeenLocation">Last Seen Location <span class="required">*</span></label><input id="lastSeenLocation" name="lastSeenLocation" type="text" placeholder="e.g. Library, second floor" required maxlength="160" aria-describedby="lastSeenLocationHelp" th:value="${lastSeenLocation}"><span class="field-help" id="lastSeenLocationHelp">Name a building, room, or nearby campus landmark.</span></div>
+                    <div class="field"><label for="dateLost">Date Lost <span class="required">*</span></label><input id="dateLost" name="dateLost" type="date" required th:value="${dateLost}"><span class="field-help">An approximate date is helpful if you are unsure.</span></div>
+                </div>
+            </fieldset>
+            <fieldset class="form-section">
+                <legend><span class="form-section-number">03</span> Description and contact</legend>
+                <div class="field"><label for="description">Description <span class="required">*</span></label><textarea id="description" name="description" placeholder="Color, brand, distinctive marks, or other identifying details" required maxlength="1500" aria-describedby="descriptionHelp" th:text="${description}"></textarea><span class="field-help" id="descriptionHelp">Avoid sharing sensitive personal details in the description.</span></div>
+                <div class="field"><label for="contactInformation">Contact Information <span class="required">*</span></label><input id="contactInformation" name="contactInformation" type="text" placeholder="Email or phone number" required maxlength="160" autocomplete="email" aria-describedby="contactHelp" th:value="${contactInformation}"><span class="field-help" id="contactHelp">Your contact details are not shown in public search results.</span></div>
+            </fieldset>
+            <div class="form-actions report-form-actions"><button class="button" type="submit">Submit Lost Report</button><a class="button button-secondary" th:href="@{/}" href="/">Back to Home</a></div>
         </form>
-        <p class="helper-note">Your report is stored in the campus lost and found database. Contact information is kept out of public search results.</p>
+        <p class="helper-note report-storage-note"><span aria-hidden="true">&#128274;</span> Your report is saved to the campus lost and found database.</p>
     </section>
 </main>
 <footer th:replace="~{fragments/site :: footer}"></footer>

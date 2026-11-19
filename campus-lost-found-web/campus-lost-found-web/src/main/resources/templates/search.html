@@ -4,30 +4,62 @@
 <body>
 <header th:replace="~{fragments/site :: header('search')}"></header>
 <main class="search-main page-main">
-    <section class="page-heading" aria-labelledby="page-title"><div class="eyebrow">Campus listings</div><h1 id="page-title">Search Items</h1><p class="intro">Find lost and found reports shared by your campus community. Contact information stays private.</p></section>
-    <section class="panel search-panel" aria-label="Search filters">
+    <section class="page-heading search-page-heading search-hero" aria-labelledby="page-title">
+        <div class="search-heading-copy">
+            <div class="eyebrow">Campus item directory</div>
+            <h1 id="page-title">Find what you are looking for</h1>
+            <p class="intro">Explore reports shared by your campus community. Contact information is kept private.</p>
+        </div>
+        <div class="search-account-actions">
+            <form class="logout-form" method="post" th:if="${isAdmin}" th:action="@{/logout}"><button class="button button-secondary logout-button" type="submit">Admin sign out</button></form>
+            <form class="logout-form" method="post" th:if="${isStudent}" th:action="@{/student/logout}"><button class="button button-secondary logout-button" type="submit">Student sign out</button></form>
+        </div>
+    </section>
+
+    <section class="panel search-filter-panel" aria-label="Search filters">
+        <div class="filter-heading"><span class="filter-icon" aria-hidden="true">&#9906;</span><div><h2>Search campus reports</h2><p>Use one or more filters to narrow the listings.</p></div></div>
         <div class="notice success" role="status" th:if="${successMessage}" th:text="${successMessage}"></div>
         <div class="notice" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
-        <form class="search-form" th:action="@{/search}" action="/search" method="get">
-            <div class="field"><label for="itemName">Item Name</label><input id="itemName" name="itemName" type="search" placeholder="Try a keyword" th:value="${itemName}"></div>
-            <div class="field"><label for="category">Category</label><select id="category" name="category"><option value="" th:selected="${category == ''}">All categories</option><option value="Electronics" th:selected="${category == 'Electronics'}">Electronics</option><option value="Books &amp; stationery" th:selected="${category == 'Books &amp; stationery'}">Books &amp; stationery</option><option value="Clothing &amp; accessories" th:selected="${category == 'Clothing &amp; accessories'}">Clothing &amp; accessories</option><option value="Keys &amp; cards" th:selected="${category == 'Keys &amp; cards'}">Keys &amp; cards</option><option value="Other" th:selected="${category == 'Other'}">Other</option></select></div>
-            <div class="field"><label for="reportType">Report Type</label><select id="reportType" name="reportType"><option value="All" th:selected="${reportType == 'All'}">All reports</option><option value="Lost" th:selected="${reportType == 'Lost'}">Lost</option><option value="Found" th:selected="${reportType == 'Found'}">Found</option></select></div>
-            <button class="button" type="submit">Search Reports</button>
+        <form class="search-form search-filters" th:action="@{/search}" action="/search" method="get">
+            <div class="field search-keyword-field">
+                <label for="itemName">Item Name</label>
+                <div class="search-input-wrap"><span aria-hidden="true">&#9906;</span><input id="itemName" name="itemName" type="search" placeholder="Search by item name" th:value="${itemName}"></div>
+            </div>
+            <div class="field">
+                <label for="category">Category</label>
+                <select id="category" name="category"><option value="" th:selected="${category == ''}">All categories</option><option value="Electronics" th:selected="${category == 'Electronics'}">Electronics</option><option value="Books &amp; stationery" th:selected="${category == 'Books &amp; stationery'}">Books &amp; stationery</option><option value="Clothing &amp; accessories" th:selected="${category == 'Clothing &amp; accessories'}">Clothing &amp; accessories</option><option value="Keys &amp; cards" th:selected="${category == 'Keys &amp; cards'}">Keys &amp; cards</option><option value="Other" th:selected="${category == 'Other'}">Other</option></select>
+            </div>
+            <div class="field">
+                <label for="reportType">Report Type</label>
+                <select id="reportType" name="reportType"><option value="All" th:selected="${reportType == 'All'}">All reports</option><option value="Lost" th:selected="${reportType == 'Lost'}">Lost items</option><option value="Found" th:selected="${reportType == 'Found'}">Found items</option></select>
+            </div>
+            <button class="button search-submit" type="submit"><span aria-hidden="true">&#9906;</span> Search</button>
         </form>
     </section>
-    <section aria-label="Search results" th:if="${reports != null and !#lists.isEmpty(reports)}">
-        <div class="results-heading"><h2>Matching reports</h2><span class="helper-note" th:text="${#lists.size(reports) + ' results'}">Results</span></div>
-        <div class="results-grid">
-            <article class="report-card" th:each="report : ${reports}">
-                <div class="report-meta"><span class="type-badge" th:classappend="${report.reportType == 'Found'} ? ' found' : ''" th:text="${report.reportType}">Lost</span><span class="status-badge" th:classappend="${report.status.name() == 'RECOVERED'} ? ' recovered' : ''" th:text="${report.status}">LOST</span><span class="category-badge" th:text="${report.category}">Category</span></div>
-                <h3 th:text="${report.itemName}">Item name</h3>
-                <p class="report-details"><span><strong>Location:</strong> <span th:text="${report.location}">Campus location</span></span><span><strong>Date:</strong> <span th:text="${#temporals.format(report.reportDate, 'MMM d, yyyy')}">Date</span></span></p>
+
+    <section class="search-results-section" aria-label="Search results" th:if="${reports != null and !#lists.isEmpty(reports)}">
+        <div class="results-heading search-results-heading"><div><div class="eyebrow">Browse listings</div><h2>Matching reports</h2></div><span class="result-count" th:text="${#lists.size(reports) + ' results'}">Results</span></div>
+        <div class="results-grid search-results-grid">
+            <article class="report-card search-result-card" th:each="report : ${reports}">
+                <div class="result-card-top">
+                    <div class="result-badges">
+                        <span class="status-badge" th:classappend="${report.status.name() == 'RECOVERED'} ? ' status-recovered' : (${report.status.name() == 'FOUND'} ? ' status-found' : ' status-lost')" th:text="${report.status}">LOST</span>
+                        <span class="category-badge" th:text="${report.category}">Category</span>
+                    </div>
+                    <span class="report-type-label" th:text="${report.reportType + ' report'}">Lost report</span>
+                </div>
+                <h2 class="result-item-name" th:text="${report.itemName}">Item name</h2>
+                <div class="result-details">
+                    <div class="result-detail"><span class="result-detail-label" th:text="${report.reportType == 'Lost' ? 'Last seen' : 'Found at'}">Location</span><span class="result-detail-value" th:text="${report.location}">Campus location</span></div>
+                    <div class="result-detail"><span class="result-detail-label">Reported on</span><time class="result-detail-value" th:datetime="${report.reportDate}" th:text="${#temporals.format(report.reportDate, 'MMM d, yyyy')}">Date</time></div>
+                </div>
                 <p class="report-description" th:text="${report.description}">Description</p>
                 <form class="recover-form" method="post" th:if="${isAdmin and report.status.name() != 'RECOVERED'}" th:action="@{/admin/reports/{id}/recover(id=${report.id})}"><input type="hidden" name="itemName" th:value="${itemName}"><input type="hidden" name="category" th:value="${category}"><input type="hidden" name="reportType" th:value="${reportType}"><button class="recover-button" type="submit">Mark as Recovered</button></form>
             </article>
         </div>
     </section>
-    <section class="empty-state" aria-live="polite" th:if="${reports == null or #lists.isEmpty(reports)}"><span class="empty-icon" aria-hidden="true">&#9906;</span><h2>No reports available yet</h2><p>There are no matching reports. Try different filters or check back later.</p></section>
+
+    <section class="empty-state search-empty-state" aria-live="polite" th:if="${reports == null or #lists.isEmpty(reports)}"><span class="empty-icon" aria-hidden="true">&#9906;</span><h2>No reports available yet</h2><p>There are no matching reports. Try a different item name, category, or report type.</p></section>
 </main>
 <footer th:replace="~{fragments/site :: footer}"></footer>
 </body>

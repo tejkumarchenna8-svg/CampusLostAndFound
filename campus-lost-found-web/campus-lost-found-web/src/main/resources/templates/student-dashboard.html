@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/site :: head('Student Dashboard | Campus Lost &amp; Found')}"></head>
+<body>
+<header th:replace="~{fragments/site :: header('student-dashboard')}"></header>
+<main class="search-main page-main student-dashboard-main">
+    <section class="student-welcome" aria-labelledby="welcome-title">
+        <div class="student-welcome-copy">
+            <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Student dashboard</div>
+            <h1 id="welcome-title">Welcome, <span th:text="${dashboard.username}">student</span></h1>
+            <p class="intro">Keep track of the items you have reported and find your next step below.</p>
+        </div>
+        <form class="logout-form" method="post" th:action="@{/student/logout}"><button class="button button-secondary logout-button" type="submit">Sign out</button></form>
+    </section>
+
+    <section class="student-statistics" aria-labelledby="student-stats-title">
+        <div class="home-section-heading"><div><div class="eyebrow">Your activity</div><h2 id="student-stats-title">Your reports at a glance</h2></div></div>
+        <div class="stats" aria-label="Your report statistics">
+            <article class="stat-card"><span class="stat-icon" aria-hidden="true">T</span><div><p class="stat-label">Total Reports</p><strong class="stat-value" th:text="${dashboard.totalReports}">0</strong></div></article>
+            <article class="stat-card"><span class="stat-icon" aria-hidden="true">L</span><div><p class="stat-label">Lost Items</p><strong class="stat-value" th:text="${dashboard.lostItems}">0</strong></div></article>
+            <article class="stat-card"><span class="stat-icon" aria-hidden="true">F</span><div><p class="stat-label">Found Items</p><strong class="stat-value" th:text="${dashboard.foundItems}">0</strong></div></article>
+            <article class="stat-card"><span class="stat-icon" aria-hidden="true">R</span><div><p class="stat-label">Recovered Items</p><strong class="stat-value" th:text="${dashboard.recoveredItems}">0</strong></div></article>
+        </div>
+    </section>
+
+    <section class="student-quick-actions" aria-labelledby="quick-actions-title">
+        <div class="home-section-heading"><div><div class="eyebrow">What would you like to do?</div><h2 id="quick-actions-title">Quick actions</h2></div></div>
+        <div class="student-action-grid">
+            <a class="student-action-card" th:href="@{/report-lost}" href="/report-lost"><span class="action-icon" aria-hidden="true">L</span><span><strong>Report Lost Item</strong><small>Tell the community what went missing.</small></span><span class="action-arrow" aria-hidden="true">&rarr;</span></a>
+            <a class="student-action-card" th:href="@{/report-found}" href="/report-found"><span class="action-icon found-action-icon" aria-hidden="true">F</span><span><strong>Report Found Item</strong><small>Help an item find its owner.</small></span><span class="action-arrow" aria-hidden="true">&rarr;</span></a>
+            <a class="student-action-card" th:href="@{/search}" href="/search"><span class="action-icon search-action-icon" aria-hidden="true">&#9906;</span><span><strong>Search Items</strong><small>Browse public campus listings.</small></span><span class="action-arrow" aria-hidden="true">&rarr;</span></a>
+        </div>
+    </section>
+
+    <section class="student-owned-reports" aria-labelledby="owned-reports-title">
+        <div class="home-section-heading student-reports-heading"><div><div class="eyebrow">Private to your account</div><h2 id="owned-reports-title">Your reports</h2></div><span class="result-count" th:text="${dashboard.totalReports + ' total'}">0 total</span></div>
+        <div class="student-report-list" th:if="${!#lists.isEmpty(dashboard.reports)}">
+            <article class="student-report-card" th:each="report : ${dashboard.reports}">
+                <div class="student-report-main">
+                    <div class="student-report-badges"><span class="status-badge" th:classappend="${report.status.name() == 'RECOVERED'} ? ' status-recovered' : (${report.status.name() == 'FOUND'} ? ' status-found' : ' status-lost')" th:text="${report.status}">LOST</span><span class="category-badge" th:text="${report.category}">Category</span></div>
+                    <h3 th:text="${report.itemName}">Item name</h3>
+                    <p class="student-report-description" th:text="${report.description}">Description</p>
+                    <div class="student-report-meta"><span><strong th:text="${report.reportType == 'Lost' ? 'Last seen' : 'Found at'}">Location</strong> <span th:text="${report.location}">Campus location</span></span><span><strong>Reported</strong> <time th:datetime="${report.reportDate}" th:text="${#temporals.format(report.reportDate, 'MMM d, yyyy')}">Date</time></span></div>
+                </div>
+                <span class="student-report-type" th:text="${report.reportType + ' report'}">Lost report</span>
+            </article>
+        </div>
+        <div class="empty-state student-empty-state" th:if="${#lists.isEmpty(dashboard.reports)}"><span class="empty-icon" aria-hidden="true">&#9906;</span><h2>No reports yet</h2><p>When you submit a lost or found item report while signed in, it will appear here.</p><a class="button" th:href="@{/report-lost}" href="/report-lost">Create your first report</a></div>
+    </section>
+</main>
+<footer th:replace="~{fragments/site :: footer}"></footer>
+</body>
+</html>

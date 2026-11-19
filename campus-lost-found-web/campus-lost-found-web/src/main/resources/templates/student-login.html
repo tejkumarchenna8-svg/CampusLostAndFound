@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/site :: head('Student Sign-in | Campus Lost &amp; Found')}"></head>
+<body>
+<header th:replace="~{fragments/site :: header('student-login')}"></header>
+<main class="admin-main page-main">
+    <section class="panel admin-panel" aria-labelledby="page-title">
+        <div class="login-mark" aria-hidden="true">S</div>
+        <div class="eyebrow">Student access</div>
+        <h1 class="login-title" id="page-title">Student sign in</h1>
+        <p class="intro">Sign in to your campus lost and found account.</p>
+        <div class="notice" role="alert" th:if="${param.error}">Sign-in failed. Check your username and password, then try again.</div>
+        <div class="notice success" role="status" th:if="${param.logout}">You have been signed out successfully.</div>
+        <form class="login-form" th:action="@{/student/login}" action="/student/login" method="post">
+            <div class="field"><label for="username">Username</label><input id="username" name="username" type="text" autocomplete="username" placeholder="Your student username" required autofocus></div>
+            <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Your password" required></div>
+            <button class="button login-submit" type="submit">Sign in</button>
+        </form>
+        <p class="admin-hint">New student? <a th:href="@{/register}" href="/register">Create an account</a>. Administrator? <a th:href="@{/admin}" href="/admin">Admin Login</a>.</p>
+        <a class="login-home-link" th:href="@{/}" href="/">&larr; Return to Homepage</a>
+    </section>
+</main>
+<footer th:replace="~{fragments/site :: footer}"></footer>
+</body>
+</html>

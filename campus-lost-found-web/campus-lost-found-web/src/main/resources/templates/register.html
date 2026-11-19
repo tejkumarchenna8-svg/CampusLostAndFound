@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/site :: head('Student Registration | Campus Lost &amp; Found')}"></head>
+<body>
+<header th:replace="~{fragments/site :: header('register')}"></header>
+<main class="admin-main page-main">
+    <section class="panel admin-panel" aria-labelledby="page-title">
+        <div class="login-mark" aria-hidden="true">S</div>
+        <div class="eyebrow">Student account</div>
+        <h1 class="login-title" id="page-title">Create your account</h1>
+        <p class="intro">Register to get started with the campus lost and found community.</p>
+        <div class="notice success" role="status" th:if="${successMessage}" th:text="${successMessage}"></div>
+        <div class="notice" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+        <form class="login-form" th:action="@{/register}" action="/register" method="post">
+            <div class="field">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" autocomplete="username" placeholder="Choose a username" required minlength="3" maxlength="32" pattern="[A-Za-z0-9._-]+" th:value="${username}">
+                <span class="helper-note">Use 3 to 32 letters, numbers, periods, underscores, or hyphens.</span>
+            </div>
+            <div class="field">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" required minlength="8" maxlength="72">
+            </div>
+            <div class="field">
+                <label for="confirmPassword">Confirm Password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Enter your password again" required minlength="8" maxlength="72">
+            </div>
+            <button class="button login-submit" type="submit">Register</button>
+        </form>
+        <p class="admin-hint">Already have an administrator account? <a th:href="@{/admin}" href="/admin">Admin Login</a></p>
+        <a class="login-home-link" th:href="@{/}" href="/">&larr; Return to Homepage</a>
+    </section>
+</main>
+<footer th:replace="~{fragments/site :: footer}"></footer>
+</body>
+</html>

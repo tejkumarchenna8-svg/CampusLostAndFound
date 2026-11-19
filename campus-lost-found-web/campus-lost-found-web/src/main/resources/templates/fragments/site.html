@@ -16,7 +16,9 @@
             <a th:class="${activePage == 'lost'} ? 'nav-link active' : 'nav-link'" th:href="@{/report-lost}" href="/report-lost">Report Lost</a>
             <a th:class="${activePage == 'found'} ? 'nav-link active' : 'nav-link'" th:href="@{/report-found}" href="/report-found">Report Found</a>
             <a th:class="${activePage == 'search'} ? 'nav-link active' : 'nav-link'" th:href="@{/search}" href="/search">Search</a>
-            <a th:class="${activePage == 'admin'} ? 'nav-link nav-admin active' : 'nav-link nav-admin'" th:href="@{/admin}" href="/admin">Admin</a>
+            <a th:class="${activePage == 'admin'} ? 'nav-link nav-admin active' : 'nav-link nav-admin'" th:href="@{/admin}" href="/admin">Admin Login</a>
+            <a th:class="${activePage == 'student-login'} ? 'nav-link active' : 'nav-link'" th:href="@{/student/login}" href="/student/login">Student Login</a>
+            <a th:href="@{/register}" href="/register">Register</a>
         </nav>
     </div>
 </header>
