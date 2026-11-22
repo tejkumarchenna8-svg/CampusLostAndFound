@@ -1,11 +1,11 @@
-FROM eclipse-temurin:25-jdk AS build
+FROM maven:3.10.0-eclipse-temurin-25 AS build
 WORKDIR /workspace
 
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
 RUN chmod +x mvnw
 COPY src/ src/
-RUN ./mvnw --batch-mode --no-transfer-progress -DskipTests package
+RUN mvn --batch-mode --no-transfer-progress -DskipTests package
 
 FROM eclipse-temurin:25-jre
 WORKDIR /app
